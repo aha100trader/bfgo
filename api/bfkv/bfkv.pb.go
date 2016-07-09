@@ -45,13 +45,13 @@ const _ = grpc.SupportPackageIsVersion2
 // Client API for BfKvService service
 
 type BfKvServiceClient interface {
-	// 活跃检测
+	// 活跃检测=
 	Ping(ctx context.Context, in *bfgateway.BfPingData, opts ...grpc.CallOption) (*bfgateway.BfPingData, error)
-	// stream测试
+	// stream测试=
 	PingStreamCS(ctx context.Context, opts ...grpc.CallOption) (BfKvService_PingStreamCSClient, error)
 	PingStreamC(ctx context.Context, opts ...grpc.CallOption) (BfKvService_PingStreamCClient, error)
 	PingStreamS(ctx context.Context, in *google_protobuf.Any, opts ...grpc.CallOption) (BfKvService_PingStreamSClient, error)
-	// Kv服务
+	// Kv服务=
 	SetKv(ctx context.Context, in *bfgateway.BfKvData, opts ...grpc.CallOption) (*bfgateway.BfVoid, error)
 	GetKv(ctx context.Context, in *bfgateway.BfKvData, opts ...grpc.CallOption) (*bfgateway.BfKvData, error)
 }
@@ -191,13 +191,13 @@ func (c *bfKvServiceClient) GetKv(ctx context.Context, in *bfgateway.BfKvData, o
 // Server API for BfKvService service
 
 type BfKvServiceServer interface {
-	// 活跃检测
+	// 活跃检测=
 	Ping(context.Context, *bfgateway.BfPingData) (*bfgateway.BfPingData, error)
-	// stream测试
+	// stream测试=
 	PingStreamCS(BfKvService_PingStreamCSServer) error
 	PingStreamC(BfKvService_PingStreamCServer) error
 	PingStreamS(*google_protobuf.Any, BfKvService_PingStreamSServer) error
-	// Kv服务
+	// Kv服务=
 	SetKv(context.Context, *bfgateway.BfKvData) (*bfgateway.BfVoid, error)
 	GetKv(context.Context, *bfgateway.BfKvData) (*bfgateway.BfKvData, error)
 }

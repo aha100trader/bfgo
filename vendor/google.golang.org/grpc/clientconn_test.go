@@ -38,6 +38,7 @@ import (
 	"time"
 
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/oauth"
 )
 
 const tlsDir = "testdata/"
@@ -47,8 +48,8 @@ func TestDialTimeout(t *testing.T) {
 	if err == nil {
 		conn.Close()
 	}
-	if err != errClientConnTimeout {
-		t.Fatalf("Dial(_, _) = %v, %v, want %v", conn, err, errClientConnTimeout)
+	if err != ErrClientConnTimeout {
+		t.Fatalf("Dial(_, _) = %v, %v, want %v", conn, err, ErrClientConnTimeout)
 	}
 }
 
@@ -61,23 +62,27 @@ func TestTLSDialTimeout(t *testing.T) {
 	if err == nil {
 		conn.Close()
 	}
-	if err != errClientConnTimeout {
-		t.Fatalf("grpc.Dial(_, _) = %v, %v, want %v", conn, err, errClientConnTimeout)
+	if err != ErrClientConnTimeout {
+		t.Fatalf("grpc.Dial(_, _) = %v, %v, want %v", conn, err, ErrClientConnTimeout)
 	}
 }
 
 func TestCredentialsMisuse(t *testing.T) {
-	creds, err := credentials.NewClientTLSFromFile(tlsDir+"ca.pem", "x.test.youtube.com")
+	tlsCreds, err := credentials.NewClientTLSFromFile(tlsDir+"ca.pem", "x.test.youtube.com")
+	if err != nil {
+		t.Fatalf("Failed to create authenticator %v", err)
+	}
+	// Two conflicting credential configurations
+	if _, err := Dial("Non-Existent.Server:80", WithTransportCredentials(tlsCreds), WithTimeout(time.Millisecond), WithBlock(), WithInsecure()); err != errCredentialsConflict {
+		t.Fatalf("Dial(_, _) = _, %v, want _, %v", err, errCredentialsConflict)
+	}
+	rpcCreds, err := oauth.NewJWTAccessFromKey(nil)
 	if err != nil {
 		t.Fatalf("Failed to create credentials %v", err)
 	}
-	// Two conflicting credential configurations
-	if _, err := Dial("Non-Existent.Server:80", WithTransportCredentials(creds), WithTimeout(time.Millisecond), WithBlock(), WithInsecure()); err != errCredentialsMisuse {
-		t.Fatalf("Dial(_, _) = _, %v, want _, %v", err, errCredentialsMisuse)
-	}
 	// security info on insecure connection
-	if _, err := Dial("Non-Existent.Server:80", WithPerRPCCredentials(creds), WithTimeout(time.Millisecond), WithBlock(), WithInsecure()); err != errCredentialsMisuse {
-		t.Fatalf("Dial(_, _) = _, %v, want _, %v", err, errCredentialsMisuse)
+	if _, err := Dial("Non-Existent.Server:80", WithPerRPCCredentials(rpcCreds), WithTimeout(time.Millisecond), WithBlock(), WithInsecure()); err != errTransportCredentialsMissing {
+		t.Fatalf("Dial(_, _) = _, %v, want _, %v", err, errTransportCredentialsMissing)
 	}
 }
 

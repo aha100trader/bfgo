@@ -48,6 +48,7 @@ enum BfProduct{
     PRODUCT_UNKNOWN = 0;        // 未知
     PRODUCT_EQUITY = 1;         // 股票
     PRODUCT_FUTURES = 2;        // 期货
+    PRODUCT_COMBINATION = 3;    // 组合，套利
 }
 
 // 价格类型常量
@@ -286,11 +287,10 @@ message BfConnectPushReq{
     // tickHandler相关
     string symbol = 5;          // 指定订阅的合约，都填*订阅所有
     string exchange = 6;        // 合约exchange
-/*
+
     // 可扩展参数
     int32 intParam = 7;         // 参数1
     string strParam = 8;        // 参数2
-*/    
 }
 
 // 获取合约信息传入的对象类
@@ -313,31 +313,31 @@ message BfGetContractReq{
 // 网关服务
 // 
 service BfGatewayService{
-    // 活跃检测
+    // 活跃检测=
     rpc Ping(BfPingData) returns (BfPingData) {}
 
     // 开始/停止接收推送
     // 1 接收异步调用的结果，如QueryAccount QueryPosition等
-    // 2 接收服务端的主动推送，如tick log notification等
+    // 2 接收服务端的主动推送，如tick log notification等=
     rpc ConnectPush(BfConnectPushReq) returns (stream google.protobuf.Any) {}
     rpc DisconnectPush(BfVoid) returns (BfVoid) {}
             
-    // 获取交易合约信息，支持*获取全部订阅合约
+    // 获取交易合约信息，支持*获取全部订阅合约=
     rpc GetContract(BfGetContractReq) returns (stream BfContractData) {}
        
-    // 发单
+    // 发单=
     rpc SendOrder(BfSendOrderReq) returns (BfSendOrderResp) {}
     
-    // 撤单
+    // 撤单=
     rpc CancelOrder(BfCancelOrderReq) returns (BfVoid) {}
     
-    // 查询账户信息
+    // 查询账户信息=
     rpc QueryAccount(BfVoid) returns (BfVoid) {}
     
-    // 查询持仓信息
+    // 查询持仓信息=
     rpc QueryPosition(BfVoid) returns (BfVoid) {}
     
-    // 查询挂单信息
+    // 查询挂单信息=
     rpc QueryOrders(BfVoid) returns (BfVoid) {}
 }
 
