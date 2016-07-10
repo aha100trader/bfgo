@@ -9,10 +9,14 @@ QQ交流群340195342，点击加入：http://jq.qq.com/?_wv=1027&k=2ADNTk3
 运行ctpgateway，点击ctp/ctpConfig配置好ctp账号
 
 2. 安装golang编译器和IDE
-   2.1 安装 golang1.6.2 windows x86
-   2.2 安装 liteide x29 windows x86
-   2.3 安装git for windows
-   
+   2.1 安装 golang1.7.0 RC1 windows x86 (http://golangtc.com/download)
+   2.2 安装 liteide x30.1 windows x86 (http://golangtc.com/download/liteide)
+   2.3 安装 git for windows (https://git-scm.com/)
+   2.4 更新 liteide的gotools和gocode，拷贝gotools.exe gocode.exe到liteide/bin
+       go get -u github.com/visualfc/gotools
+       go get -u github.com/nsf/gocode
+       (https://github.com/visualfc/liteide/issues/633)
+
 3. 下载bygo源代码
    3.1 go get github.com/sunwangme/bfgo
 
